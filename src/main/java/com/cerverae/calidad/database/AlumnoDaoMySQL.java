@@ -19,27 +19,15 @@ public class AlumnoDaoMySQL implements DAO {
 	
 
 	public Connection getConnectionMySQL(){
-        String url = "jdbc:mysql://localhost:3306/alumnos?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-        String user = "root";
-        String password = "Esteban";
-        
-        Connection connection = null;
-        
-        try {
-			//Class.forName("com.mysql.cj.jdbc.Driver");
-			connection = DriverManager.getConnection(url, user, password);
-			//String querry = query;
-			
-			//Statement statement = connection.createStatement();
-			//statement.executeQuery(querry);
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
-        return connection;
-
+		
+			Connection con=null;  
+	        try{  
+	            Class.forName("oracle.jdbc.driver.OracleDriver"); 
+	            con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","dbunit","dbunit");  
+	        }catch(Exception e){System.out.println(e);}  
+	        return con;  
+	        
+		
    
         	
   
@@ -52,7 +40,7 @@ public class AlumnoDaoMySQL implements DAO {
 		PreparedStatement preparedStatement;
 		
 		try {
-			preparedStatement = connection.prepareStatement("insert INTO student(id, name, age, grade, email) values (?, ?, ?, ?, ?)");
+			preparedStatement = connection.prepareStatement("insert INTO alumno(id, name, age, grade, email) values (?, ?, ?, ?, ?)");
 			
 			preparedStatement.setInt(1, a.getId());
 			preparedStatement.setString(2, a.getName());

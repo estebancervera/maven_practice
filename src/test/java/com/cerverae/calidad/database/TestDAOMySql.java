@@ -30,7 +30,7 @@ public class TestDAOMySql {
 	public void setupMocks() {
 		database = mock(DAOMySql.class);
 		//dependency = new Dependency(new SubDependency());
-		alumno = new Alumno(1,"Esteban", 10, 8.5, "esteban@gmail.com");
+		alumno = new Alumno(1,"Esteban", 10, 9, "esteban@gmail.com");
 		setupDatabase();
 		addAlumnos();
 	}
@@ -99,11 +99,11 @@ public class TestDAOMySql {
 	@Test
 	public void testUpdateAlumno() {
 		
-		when(database.updateAlumnoCalificacion(any(Alumno.class), anyDouble())).thenAnswer(new Answer<Boolean>() {
+		when(database.updateAlumnoCalificacion(any(Alumno.class), anyInt())).thenAnswer(new Answer<Boolean>() {
 			
 			public Boolean answer(InvocationOnMock invocation) throws Throwable {
 			 Alumno arg = (Alumno) invocation.getArguments()[0];
-			 Double arg1 = (Double) invocation.getArguments()[1];
+			 int arg1 = (Integer) invocation.getArguments()[1];
 			 
 			 if(database.getDatabase().containsKey(arg.getId())) {
 				 Alumno alumno = database.getDatabase().get(arg.getId());
@@ -121,7 +121,7 @@ public class TestDAOMySql {
 	
 		
 		database.addAlumno(alumno);
-		double cal = database.getDatabase().get(alumno.getId()).getGrade();
+		int cal = database.getDatabase().get(alumno.getId()).getGrade();
 		database.updateAlumnoCalificacion(alumno, 9.5);
 		cal = database.getDatabase().get(alumno.getId()).getGrade();
 		

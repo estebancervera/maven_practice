@@ -5,11 +5,11 @@ public class Alumno {
 	private int id;
 	private String name;
 	private int age;
-	private double grade;
+	private int grade;
 	private String email;
 	
 	
-	public Alumno(int id, String name, int age, double grade, String email) {
+	public Alumno(int id, String name, int age, int grade, String email) {
 		this.id = id;
 		this.name = name;
 		this.age = age;
@@ -27,7 +27,7 @@ public class Alumno {
 		return age;
 	}
 	
-	public double getGrade() {
+	public int getGrade() {
 		return grade;
 	}
 	
@@ -47,7 +47,7 @@ public class Alumno {
 		this.age = age;
 	}
 	
-	public void setGrade(double grade) {
+	public void setGrade(int grade) {
 		this.grade = grade;
 	}
 	

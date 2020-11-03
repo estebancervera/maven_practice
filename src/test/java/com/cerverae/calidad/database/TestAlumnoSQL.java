@@ -78,7 +78,7 @@ public class TestAlumnoSQL extends DBTestCase {
 	@Test
 	
 	public void testInsertCount() {
-		Alumno alumno = new Alumno(3, "Esteban C", 23, 9.0, "esteban@gmail.com");
+		Alumno alumno = new Alumno(3, "Esteban C", 23, 9, "esteban@gmail.com");
 		
 		AlumnoDaoMySQL daoMySQL = new AlumnoDaoMySQL();
 		
