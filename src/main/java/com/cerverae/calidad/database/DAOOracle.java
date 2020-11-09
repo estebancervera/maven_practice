@@ -2,7 +2,7 @@ package com.cerverae.calidad.database;
 
 import java.util.HashMap;
 
-public class DAOMySql implements DAO {
+public class DAOOracle implements DAO {
 
 	
 	private HashMap<Integer, Alumno> database = new HashMap<Integer, Alumno>();

@@ -23,12 +23,12 @@ import com.cerverae.calidad.dobles.Dependency;
 public class TestDAOMySql {
 
 
-	private DAOMySql database;
+	private DAOOracle database;
 	private Alumno alumno;
 	
 	@Before 
 	public void setupMocks() {
-		database = mock(DAOMySql.class);
+		database = mock(DAOOracle.class);
 		//dependency = new Dependency(new SubDependency());
 		alumno = new Alumno(1,"Esteban", 10, 9, "esteban@gmail.com");
 		setupDatabase();

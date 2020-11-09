@@ -16,19 +16,17 @@ import java.io.InputStream;
 import org.dbunit.PropertiesBasedJdbcDatabaseTester;
 import org.dbunit.database.IDatabaseConnection;
 
-public class TestAlumnoSQL extends DBTestCase {
+public class TestAlumnoOracleSQL extends DBTestCase {
 
 	
-	public TestAlumnoSQL(String name) {
+	
+	
+	public TestAlumnoOracleSQL(String name) {
 		super(name);
-		System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_DRIVER_CLASS, "com.mysql.cj.jdbc.Driver");
-		System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_CONNECTION_URL, "jdbc:mysql://localhost:3306/alumnos?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
-		System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_USERNAME, "root");
-		System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_PASSWORD, "Esteban");
-		System.setProperty( PropertiesBasedJdbcDatabaseTester.DBUNIT_SCHEMA,"alumnos.student");
-
-		
-		
+		System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_DRIVER_CLASS, "oracle.jdbc.driver.OracleDriver");
+		System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_CONNECTION_URL, "jdbc:oracle:thin:@localhost:1521:xe");
+		System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_USERNAME, "dbunit");
+		System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_PASSWORD, "dbunit");	
 	}
 	
 	@Before
@@ -44,12 +42,11 @@ public class TestAlumnoSQL extends DBTestCase {
 
 	
 	
-	/*
+	
 	@Test
 	public void testInsert() {
-		Alumno alumno = new Alumno(3, "Esteban C", 23, 9.0, "esteban@gmail.com");
-		
-		AlumnoDaoMySQL daoMySQL = new AlumnoDaoMySQL();
+		Alumno alumno = new Alumno(4, "Esteban C", 23, 9, "esteban@gmail.com");
+		AlumnoDaoOracleSQL daoMySQL = new AlumnoDaoOracleSQL();
 		
 		daoMySQL.addAlumno(alumno);
 		
@@ -57,11 +54,11 @@ public class TestAlumnoSQL extends DBTestCase {
 		try {
 			IDataSet databaseDataSet = getConnection().createDataSet();
 			
-			ITable actualTable = databaseDataSet.getTable("student");
+			ITable actualTable = databaseDataSet.getTable("alumno");
 			
 			//InputStream xmlFileInputStream = getClass().getResourceAsStream("src/resources/insert_result.xml");
-			IDataSet expectedTableDataSet = new FlatXmlDataSetBuilder().build(new File("src/resources/insert_result.xml"));
-			ITable expectedTable = expectedTableDataSet.getTable("student");
+			IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(new File("src/resources/insert_result.xml"));
+			ITable expectedTable = expectedDataSet.getTable("alumno");
 			
 			Assertion.assertEquals(expectedTable, actualTable);
 			
@@ -73,14 +70,14 @@ public class TestAlumnoSQL extends DBTestCase {
 		
 	}
 
-	 */
+	 
 	
 	@Test
 	
 	public void testInsertCount() {
-		Alumno alumno = new Alumno(3, "Esteban C", 23, 9, "esteban@gmail.com");
 		
-		AlumnoDaoMySQL daoMySQL = new AlumnoDaoMySQL();
+		Alumno alumno = new Alumno(5, "Esteban 3", 21, 10, "esteban@gmail.com");
+		AlumnoDaoOracleSQL daoOracle = new AlumnoDaoOracleSQL();
 		
 		IDatabaseConnection connection;
 		
@@ -88,14 +85,18 @@ public class TestAlumnoSQL extends DBTestCase {
 			
 			connection = getConnection();
 			
-			int actualRows = connection.getRowCount("student");
-			daoMySQL.addAlumno(alumno);
-			assertEquals(actualRows + 1, connection.getRowCount("student"));
+			int actualRows = connection.getRowCount("alumno");
+			daoOracle.addAlumno(alumno);
+			assertEquals(actualRows + 1, connection.getRowCount("alumno"));
+			connection.close();
 			
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
+	
+	
 	@Override
 	protected IDataSet getDataSet() throws Exception {
 		// TODO Auto-generated method stub

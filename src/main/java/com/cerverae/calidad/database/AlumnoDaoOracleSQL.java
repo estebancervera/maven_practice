@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 
 
 
-public class AlumnoDaoMySQL implements DAO {
+public class AlumnoDaoOracleSQL implements DAO {
 	
 	
 
