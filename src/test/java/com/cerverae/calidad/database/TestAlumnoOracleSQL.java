@@ -13,13 +13,14 @@ import org.dbunit.operation.DatabaseOperation;
 
 import java.io.File;
 import java.io.InputStream;
+
+import javax.sound.sampled.TargetDataLine;
+
 import org.dbunit.PropertiesBasedJdbcDatabaseTester;
 import org.dbunit.database.IDatabaseConnection;
 
 public class TestAlumnoOracleSQL extends DBTestCase {
 
-	
-	
 	
 	public TestAlumnoOracleSQL(String name) {
 		super(name);
@@ -40,8 +41,12 @@ public class TestAlumnoOracleSQL extends DBTestCase {
 		}
 	}
 
-	
-	
+	@Override
+	protected IDataSet getDataSet() throws Exception {
+		// TODO Auto-generated method stub
+		//InputStream xmlFile = getClass().getResourceAsStream("src/resources/alumno_init.xml");
+		return new FlatXmlDataSetBuilder().build(new File("src/resources/alumno_init.xml"));
+	}
 	
 	@Test
 	public void testInsert() {
@@ -73,10 +78,9 @@ public class TestAlumnoOracleSQL extends DBTestCase {
 	 
 	
 	@Test
-	
 	public void testInsertCount() {
 		
-		Alumno alumno = new Alumno(5, "Esteban 3", 21, 10, "esteban@gmail.com");
+		Alumno alumno = new Alumno(5, "Esteban 5", 25, 10, "esteban@gmail.com");
 		AlumnoDaoOracleSQL daoOracle = new AlumnoDaoOracleSQL();
 		
 		IDatabaseConnection connection;
@@ -99,10 +103,10 @@ public class TestAlumnoOracleSQL extends DBTestCase {
 	
 	@Test
 	public void testDelete() {
-		Alumno alumno = new Alumno(4, "Esteban C", 23, 9, "esteban@gmail.com");
+		Alumno alumno = new Alumno(2, "Esteban 2", 22, 9, "esteban@gmail.com");
 		AlumnoDaoOracleSQL daoMySQL = new AlumnoDaoOracleSQL();
 		
-		daoMySQL.addAlumno(alumno);
+		daoMySQL.deleteAlumno(alumno);
 		
 		//verify
 		try {
@@ -110,8 +114,10 @@ public class TestAlumnoOracleSQL extends DBTestCase {
 			
 			ITable actualTable = databaseDataSet.getTable("alumno");
 			
+			System.out.println(actualTable);
+			
 			//InputStream xmlFileInputStream = getClass().getResourceAsStream("src/resources/insert_result.xml");
-			IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(new File("src/resources/insert_result.xml"));
+			IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(new File("src/resources/delete_result.xml"));
 			ITable expectedTable = expectedDataSet.getTable("alumno");
 			
 			Assertion.assertEquals(expectedTable, actualTable);
@@ -125,12 +131,31 @@ public class TestAlumnoOracleSQL extends DBTestCase {
 	}
 	
 	
-	@Override
-	protected IDataSet getDataSet() throws Exception {
-		// TODO Auto-generated method stub
-		//InputStream xmlFile = getClass().getResourceAsStream("src/resources/alumno_init.xml");
-		return new FlatXmlDataSetBuilder().build(new File("src/resources/alumno_init.xml"));
+	@Test
+	public void testDeleteCount() {
+		
+		Alumno alumno = new Alumno(3, "Esteban 3", 23, 10, "esteban@gmail.com");
+		AlumnoDaoOracleSQL daoOracle = new AlumnoDaoOracleSQL();
+		
+		IDatabaseConnection connection;
+		
+		try {
+			
+			connection = getConnection();
+			
+			int actualRows = connection.getRowCount("alumno");
+			daoOracle.deleteAlumno(alumno);
+			assertEquals(actualRows - 1, connection.getRowCount("alumno"));
+			connection.close();
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
 	}
+	
+	
+
 
 }
  
