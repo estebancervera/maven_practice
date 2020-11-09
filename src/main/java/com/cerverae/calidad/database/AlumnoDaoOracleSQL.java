@@ -45,7 +45,7 @@ public class AlumnoDaoOracleSQL implements DAO {
 			preparedStatement.setInt(1, a.getId());
 			preparedStatement.setString(2, a.getName());
 			preparedStatement.setInt(3, a.getAge());
-			preparedStatement.setDouble(4, a.getGrade());
+			preparedStatement.setInt(4, a.getGrade());
 			preparedStatement.setString(5, a.getEmail());
 			
 			int status = preparedStatement.executeUpdate();
@@ -56,6 +56,7 @@ public class AlumnoDaoOracleSQL implements DAO {
 			
 		} catch (SQLException e) {
 			// TODO: handle exception
+			System.out.println(e);
 		}
 		
 		
@@ -64,21 +65,114 @@ public class AlumnoDaoOracleSQL implements DAO {
 
 	public boolean deleteAlumno(Alumno a) {
 		// TODO Auto-generated method stub
+		
+		Connection connection = getConnectionMySQL();
+		PreparedStatement preparedStatement;
+		
+		try {
+			preparedStatement = connection.prepareStatement("Delete from alumno WHERE  id = ?");
+			
+			preparedStatement.setInt(1, a.getId());
+			
+			int status = preparedStatement.executeUpdate();
+			
+			
+			
+			connection.close();
+			
+		} catch (SQLException e) {
+			// TODO: handle exception
+			System.out.println(e);
+		}
+		
 		return false;
 	}
 
 	public int getAllAlumnosCount() {
 		// TODO Auto-generated method stub
-		return 0;
+		
+		Connection connection = getConnectionMySQL();
+		PreparedStatement preparedStatement;
+		int count = 0;
+		try {
+			preparedStatement = connection.prepareStatement("SELECT * from alumno");
+			
+			
+			 count = preparedStatement.executeUpdate();
+		
+			
+			connection.close();
+			
+		} catch (SQLException e) {
+			// TODO: handle exception
+			System.out.println(e);
+		}
+		
+		
+		return count;
 	}
 
 	public Alumno getAlumno(int id) {
 		// TODO Auto-generated method stub
-		return null;
+		
+		Connection connection = getConnectionMySQL();
+		PreparedStatement preparedStatement;
+		ResultSet rs;
+		
+		Alumno retrieved = null;
+		
+		try {
+			preparedStatement = connection.prepareStatement("SELECT * from alumno WHERE id = ?");
+			
+			preparedStatement.setInt(1, id);
+			rs = preparedStatement.executeQuery();
+			
+			rs.next();
+			
+			int retrievedId = rs.getInt(1);
+			String retrievedName = rs.getString(2);
+			int retrievedAge = rs.getInt(3);
+			int retrievedGrade = rs.getInt(4);
+			String retrievedEmail = rs.getString(5);
+			
+			
+			retrieved = new Alumno(retrievedId, retrievedName, retrievedAge, retrievedGrade, retrievedEmail);
+			
+			rs.close();
+			preparedStatement.close();
+			connection.close();
+			
+		} catch (SQLException e) {
+			// TODO: handle exceptions
+			System.out.println(e);
+		}
+		
+		return retrieved;
 	}
 
-	public boolean updateAlumnoCalificacion(Alumno a, double calificacion) {
+	public boolean updateAlumnoCalificacion(Alumno a, int calificacion) {
 		// TODO Auto-generated method stub
+		
+		Connection connection = getConnectionMySQL();
+		PreparedStatement preparedStatement;
+		
+		try {
+			preparedStatement = connection.prepareStatement("UPDATE alumno set grade = ? WHERE  id = ?");
+			
+			preparedStatement.setInt(1, calificacion);
+			preparedStatement.setInt(2, a.getId());
+			
+			 preparedStatement.executeUpdate();
+			
+			
+			
+			connection.close();
+			
+		} catch (SQLException e) {
+			// TODO: handle exception
+			System.out.println(e);
+		}
+		
 		return false;
 	}
 

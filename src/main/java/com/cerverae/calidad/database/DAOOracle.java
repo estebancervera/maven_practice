@@ -19,7 +19,7 @@ public class DAOOracle implements DAO {
 		
 	}
 
-	public boolean updateAlumnoCalificacion(Alumno a, double calificacion) {
+	public boolean updateAlumnoCalificacion(Alumno a, int calificacion) {
 		return false;
 		// TODO Auto-generated method stub
 		

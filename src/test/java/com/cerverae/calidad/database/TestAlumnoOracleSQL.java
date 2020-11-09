@@ -97,6 +97,34 @@ public class TestAlumnoOracleSQL extends DBTestCase {
 	}
 	
 	
+	@Test
+	public void testDelete() {
+		Alumno alumno = new Alumno(4, "Esteban C", 23, 9, "esteban@gmail.com");
+		AlumnoDaoOracleSQL daoMySQL = new AlumnoDaoOracleSQL();
+		
+		daoMySQL.addAlumno(alumno);
+		
+		//verify
+		try {
+			IDataSet databaseDataSet = getConnection().createDataSet();
+			
+			ITable actualTable = databaseDataSet.getTable("alumno");
+			
+			//InputStream xmlFileInputStream = getClass().getResourceAsStream("src/resources/insert_result.xml");
+			IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(new File("src/resources/insert_result.xml"));
+			ITable expectedTable = expectedDataSet.getTable("alumno");
+			
+			Assertion.assertEquals(expectedTable, actualTable);
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		}
+		
+	}
+	
+	
 	@Override
 	protected IDataSet getDataSet() throws Exception {
 		// TODO Auto-generated method stub

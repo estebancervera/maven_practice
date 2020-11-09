@@ -122,7 +122,7 @@ public class TestDAOMySql {
 		
 		database.addAlumno(alumno);
 		int cal = database.getDatabase().get(alumno.getId()).getGrade();
-		database.updateAlumnoCalificacion(alumno, 9.5);
+		database.updateAlumnoCalificacion(alumno, 9);
 		cal = database.getDatabase().get(alumno.getId()).getGrade();
 		
 		assertThat(cal, is(alumno.getGrade()));
