@@ -48,6 +48,9 @@ public class TestAlumnoOracleSQL extends DBTestCase {
 		return new FlatXmlDataSetBuilder().build(new File("src/resources/alumno_init.xml"));
 	}
 	
+	
+	//INSERT TEST --- BOTH COUNT AND WITH DATASET
+	
 	@Test
 	public void testInsert() {
 		Alumno alumno = new Alumno(4, "Esteban C", 23, 9, "esteban@gmail.com");
@@ -100,6 +103,7 @@ public class TestAlumnoOracleSQL extends DBTestCase {
 		}
 	}
 	
+	//DELETE TEST --- BOTH COUNT AND WITH DATASET
 	
 	@Test
 	public void testDelete() {
@@ -114,7 +118,7 @@ public class TestAlumnoOracleSQL extends DBTestCase {
 			
 			ITable actualTable = databaseDataSet.getTable("alumno");
 			
-			System.out.println(actualTable);
+			
 			
 			//InputStream xmlFileInputStream = getClass().getResourceAsStream("src/resources/insert_result.xml");
 			IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(new File("src/resources/delete_result.xml"));
@@ -137,6 +141,7 @@ public class TestAlumnoOracleSQL extends DBTestCase {
 		Alumno alumno = new Alumno(3, "Esteban 3", 23, 10, "esteban@gmail.com");
 		AlumnoDaoOracleSQL daoOracle = new AlumnoDaoOracleSQL();
 		
+		daoOracle.getAlumno(alumno.getId());
 		IDatabaseConnection connection;
 		
 		try {
@@ -154,6 +159,85 @@ public class TestAlumnoOracleSQL extends DBTestCase {
 		}
 	}
 	
+	//RETRIEVE TEST
+	
+	
+	@Test
+	public void testGetAlumno() throws Exception {
+		Alumno alumno = new Alumno(3, "Esteban 3", 23, 10, "esteban@gmail.com");
+		
+		AlumnoDaoOracleSQL daoOracle = new AlumnoDaoOracleSQL();
+		
+		try {
+			IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(new File("src/resources/retrieve_result.xml"));
+			ITable expectedTable = expectedDataSet.getTable("alumno");
+			
+			ITable actualData = getConnection().createQueryTable("result_alumno", "SELECT * FROM alumno WHERE id = " + alumno.getId());
+			
+			Assertion.assertEquals(expectedTable, actualData);
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+		
+		
+	}
+	
+	
+	//GET ALL COUNT TEST
+	
+	@Test
+	public void testGetAllCount() {
+		
+		AlumnoDaoOracleSQL daoOracle = new AlumnoDaoOracleSQL();
+		
+		
+		IDatabaseConnection connection;
+		
+		try {
+			
+			connection = getConnection();
+			
+			int actualRows = connection.getRowCount("alumno");
+			int expectedResult = daoOracle.getAllAlumnosCount();
+			assertEquals(actualRows, expectedResult);
+			connection.close();
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+	
+	
+	//UPDATE TEST
+	
+	@Test
+	public void testUpdate() {
+		Alumno alumno = new Alumno(3, "Esteban 3", 23, 10, "esteban@gmail.com");
+		AlumnoDaoOracleSQL daoMySQL = new AlumnoDaoOracleSQL();
+		
+		daoMySQL.updateAlumnoCalificacion(alumno, 5);
+		
+		//verify
+		try {
+			IDataSet databaseDataSet = getConnection().createDataSet();
+			
+			ITable actualTable = databaseDataSet.getTable("alumno");
+			
+
+			IDataSet expectedDataSet = new FlatXmlDataSetBuilder().build(new File("src/resources/update_result.xml"));
+			ITable expectedTable = expectedDataSet.getTable("alumno");
+			
+			Assertion.assertEquals(expectedTable, actualTable);
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.getMessage());
+		}
+		
+	}
 	
 
 
